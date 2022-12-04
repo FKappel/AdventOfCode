@@ -41,8 +41,6 @@ for line in f:
     if n == 2:
         for letter in group[0]:
             if group[1].count(letter) > 0 and group[2].count(letter) > 0:
-                print(group)
-                print(letter)
                 sum += getValue(letter)
                 break
     n+=1
