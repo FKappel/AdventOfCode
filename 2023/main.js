@@ -50,14 +50,21 @@ function doDay1_2(){
         ["nine","9"],
     ]);
     sum = 0;
-    
     input = getInput("1");
     input.forEach(element => {
         const matches = String(element).match(regex);
         var firstDigit = matches[0];
-        var lastDigit = matches[(matches.length-1)];
-        // trknlxnv43zxlrqjtwonect  -> hier wird two als last number, nicht one, erkannt. 
-        //Nur für last Number relevant wenn sich zwei keys überschneiden -> twone wird dadurch als two anstatt one erkannt
+        strTest=""
+        const ubound = element.length - 1
+        for (let i = ubound; i>=0; i--){
+            strTest = element[i] + strTest
+            const matches = String(strTest).match(regex)
+            if(!!matches){
+                console.log(strTest)
+                var lastDigit = matches[0];
+                break
+            }
+        }
         if(isNaN(firstDigit)){
             firstDigit = NumberMapping.get(firstDigit)
         }
