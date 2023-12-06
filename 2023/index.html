@@ -2,15 +2,20 @@
 <html>
     <header>
         <script type="text/javascript" src="./main.js"></script> 
+        <style>
+          #drop-zone {
+            width: 300px;
+            height: 200px;
+            border: 2px dashed #ccc;
+            text-align: center;
+            padding: 20px;
+            margin: 50px auto;
+          }
+        </style>
     </header>
 <body>
-
-<button type="button"
-onclick="doDay1_1()">
-Day1.1</button>
-<button type="button"
-onclick="doDay1_2()">
-Day1.2</button>
+  <div id="drop-zone">Dateien hier ablegen</div>
+  
 
 
 <h3> Output <button type="button"
@@ -18,8 +23,44 @@ Day1.2</button>
     Copy Output</button>
 </h3>
 
-<p id="Output"></p>
+<p id="OutputP1"></p>
+<p id="OutputP2"></p>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var dropZone = document.getElementById('drop-zone');
+
+    dropZone.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      dropZone.style.border = '2px dashed #333';
+    });
+
+    dropZone.addEventListener('dragleave', function () {
+      dropZone.style.border = '2px dashed #ccc';
+    });
+
+    dropZone.addEventListener('drop', function (e) {
+      e.preventDefault();
+      dropZone.style.border = '2px dashed #ccc';
+
+      var files = e.dataTransfer.files;
+
+      if (files.length > 0) {
+        var file = files[0];
+        var reader = new FileReader();
+
+        reader.onload = function (event) {
+          var content = event.target.result;
+          var fileName = file.name;
+          manageFileDrop(content, fileName)
+          // Hier können Sie den Dateiinhalt weiterverarbeiten
+        };
+
+        reader.readAsText(file);
+      }
+    });
+  });
+</script>
 </body>
 
 </html>
