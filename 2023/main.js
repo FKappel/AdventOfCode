@@ -38,7 +38,7 @@ function manageFileDrop(content, fileName){
             break;
         case "2":
             doDay2_1(arrContent)
-            //doDay2_2(arrContent)
+            doDay2_2(arrContent)
             break;
         default:
             console.log("unknown day")
@@ -110,42 +110,96 @@ function doDay2_1(input){
     const inputRegex = /^Game (\d+): (.*)$/
     const gameRegex = /(\d+) (.*)$/
     var IDsum = 0
-
+    console.log("Start Part 1")
     input.forEach(element =>{
         let tooHigh = false
-        let countR = 0
-        let countG = 0
-        let countB = 0
         let matches = String(element).match(inputRegex) 
         let gameID = Number(matches[1])
         let drawings = matches[2]
-        let arrDrawings = drawings.split(/,|;/).map(function(item) {
+        let arrDrawings = drawings.split(';').map(function(item) {
             return item.trim();
           });
-        console.log(arrDrawings)
-        arrDrawings.forEach(member => {
-            let matches = member.match(gameRegex)
-            switch(matches[2]){
-                case "green":
-                    countG += Number(matches[1])
-                    break
-                case "blue":
-                    countB += Number(matches[1])
-                    break
-                case "red":
-                    countR += Number(matches[1])
-                    break
-                default:
-            }
-            if(countG > gCubes || countB > bCubes || countR > rCubes){
-                tooHigh = true
-            }
-        });
+        for(let i = 0; i<arrDrawings.length;i++){
+            var countR = 0
+            var countG = 0
+            var countB = 0
+            member = arrDrawings[i]
+            let  arrCurrDrawing = member.split(',').map(function(item) {
+                return item.trim();
+              });
+            arrCurrDrawing.forEach(draw => {
+                let matches = draw.match(gameRegex)
+                switch(matches[2]){
+                    case "green":
+                        countG += Number(matches[1])
+                        break
+                    case "blue":
+                        countB += Number(matches[1])
+                        break
+                    case "red":
+                        countR += Number(matches[1])
+                        break
+                    default:
+                }
+                if(countG > gCubes || countB > bCubes || countR > rCubes){
+                    tooHigh = true
+                }
+            })
+            if(tooHigh){break}
+        };
         if(!tooHigh){
             IDsum += gameID
         }
-
     })
-    console.log(IDsum)   
+    writeOutput(IDsum, 1)  
+    console.log("Part 1 done")
 }
 
+function doDay2_2(input){
+    const inputRegex = /^Game (\d+): (.*)$/
+    const gameRegex = /(\d+) (.*)$/
+    var IDsum = 0
+    console.log("Start Part 2")
+    input.forEach(element =>{
+        var minR = 0
+        var minG = 0
+        var minB = 0
+        let matches = String(element).match(inputRegex) 
+        let drawings = matches[2]
+        let arrDrawings = drawings.split(';').map(function(item) {
+            return item.trim();
+          });
+        for(let i = 0; i<arrDrawings.length;i++){
+            member = arrDrawings[i]
+            let  arrCurrDrawing = member.split(',').map(function(item) {
+                return item.trim();
+              });
+            arrCurrDrawing.forEach(draw => {
+                let matches = draw.match(gameRegex)
+                switch(matches[2]){
+                    case "green":
+                       if(minG<Number(matches[1])){
+                            minG = Number(matches[1])
+                       }
+                        break
+                    case "blue":
+                        if(minB<Number(matches[1])){
+                            minB = Number(matches[1])
+                       }
+                        break
+                    case "red":
+                        if(minR<Number(matches[1])){
+                            minR = Number(matches[1])
+                       }
+                        break
+                    default:
+                }
+            })
+
+        };
+        var power = minG * minB * minR
+        IDsum = IDsum + power
+    })
+    writeOutput(IDsum, 2) 
+    console.log("Part 2 done")   
+}
